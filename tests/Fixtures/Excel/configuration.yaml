@@ -1,0 +1,79 @@
+entities:
+  - type: author
+    attributes:
+      - name: first_name
+        type: string
+      - name: last_name
+        type: string
+      - name: birth_year
+        type: integer
+    key:
+      - last_name
+      - first_name
+  - type: book
+    attributes:
+      - name: title
+        type: string
+      - name: author
+        type: reference
+        refersTo: author
+        refersBy: id
+      - name: isbn
+        type: string
+      - name: publishing_year
+        type: string
+    key:
+      - title
+mappings:
+  Books:
+    configuration:
+      columnOffset: 0
+      headerRowIndex: 1
+      dataRowOffset: 1
+    iterations:
+      first:
+        - method: splitName
+          parameters:
+            name: author
+          returns:
+            - entity: author
+              attribute:
+                - last_name
+                - first_name
+        - method: setValue
+          parameters:
+            value: title
+          returns:
+            - entity: book
+              attribute:
+                - title
+        - method: setValue
+          parameters:
+            value: ISBN
+          returns:
+            - entity: book
+              attribute:
+                - isbn
+        - method: setReference
+          entityType: author
+          parameters:
+            value: author
+          returns:
+            - entity: book
+              attribute:
+                - author
+      second:
+        - method: setValue
+          parameters:
+            value: publishing year
+          returns:
+            - entity: author
+              attribute:
+                - birth_year
+        - method: setValue
+          parameters:
+            value: publishing year
+          returns:
+            - entity: book
+              attribute:
+                - publishing_year

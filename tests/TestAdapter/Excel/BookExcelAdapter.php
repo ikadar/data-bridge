@@ -6,87 +6,15 @@ use App\Adapter\Excel\ExcelAdapter;
 
 class BookExcelAdapter extends ExcelAdapter
 {
-    protected function getStructure(): array
+    public function __construct(string $filePath)
     {
-        return [
-            "entities" => [
-                [
-                    "name" => "author",
-                    "attributes" => [
-                        [
-                            "name" => "first_name",
-                            "type" => "string"
-                        ],
-                        [
-                            "name" => "last_name",
-                            "type" => "string"
-                        ]
-                    ]
-                ],
-                [
-                    "name" => "book",
-                    "attributes" => [
-                        [
-                            "name" => "title",
-                            "type" => "string"
-                        ],
-                        [
-                            "name" => "ID_author",
-                            "type" => "reference",
-                            "refersTo" => "author",
-                            "refersBy" => "id"
-                        ]
-                    ]
-                ]
-            ]
-        ];
+        $this->configurationFilePath = "./tests/Fixtures/Excel/configuration.yaml";
+        parent::__construct($filePath, $this->configurationFilePath);
     }
 
-    protected function getMappings(): array
+    protected function splitName(string $name): array
     {
-        return [
-            [
-                "inputs" => [
-                    [
-                        "sheet" => "Books",
-                        "column" => "title"
-                    ]
-                ],
-                "outputs" => [
-                    [
-                        "entity" => "book",
-                        "attribute" => "title",
-                        "type" => "value"
-                    ]
-                ]
-            ],
-            [
-                "inputs" => [
-                    [
-                        "sheet" => "Books",
-                        "column" => "author"
-                    ]
-                ],
-                "outputs" => [
-                    [
-                        "entity" => "author",
-                        "attribute" => ["last_name", "first_name"],
-                        "type" => "customLogic",
-                        "method" => "splitName"
-                    ],
-                    [
-                        "entity" => "book",
-                        "attribute" => "ID_author",
-                        "type" => "reference"
-                    ]
-                ]
-            ]
-        ];
-    }
-
-    protected function splitName(string $fullName): array
-    {
-        $parts = explode(',', $fullName);
+        $parts = explode(',', $name);
         return [
             'last_name' => trim($parts[0]),
             'first_name' => trim($parts[1] ?? '')

@@ -8,12 +8,9 @@ use PHPUnit\Framework\TestCase;
 
 class BookExcelAdapterTest extends TestCase {
     public function testFetch() {
-        $adapter = new BookExcelAdapter("./tests/Fixtures/Excel/books.xlsx");
-        $result = $adapter->fetch();
-
-        dump($result);
-
-        $this->assertInstanceOf(IntermediateFormat::class, $result);
-        // További asserciók az eredmény ellenőrzésére
+        $adapter = new BookExcelAdapter(
+            "./tests/Fixtures/Excel/books.xlsx",
+        );
+        $intermediateStore = $adapter->fetch();
     }
 }

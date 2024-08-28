@@ -1,0 +1,108 @@
+entities:
+  - type: client
+    attributes:
+      - name: name
+        type: string
+    key:
+      - name
+  - type: redirection
+    attributes:
+      - name: redirectionid
+        type: string
+      - name: client
+        type: reference
+        refersTo: client
+        refersBy: id
+      - name: designation
+        type: string
+      - name: redir_url
+        type: string
+    key:
+      - client
+      - redirectionid
+mappings:
+  redirections:
+    configuration:
+      columnOffset: 0
+      headerRowIndex: 1
+      dataRowOffset: 1
+    iterations:
+      first:
+        - method: setValue
+          parameters:
+            value: environnement
+          returns:
+            - entity: client
+              attribute:
+                - name
+
+#        - method: getClientAndRedirectionId
+#          parameters:
+#            client: environnement
+#            redirId: id qr code
+#          returns:
+#            - entity: redirection
+#              attribute:
+#                - client_id
+#                - client
+#                - redirectionid
+
+      second:
+        - method: setValue
+          parameters:
+            value: environnement
+          returns:
+            - entity: redirection
+              attribute:
+                - client
+
+        - method: setReference
+          entityType: client
+          parameters:
+            value: environnement
+          returns:
+            - entity: redirection
+              attribute:
+                - client_id
+
+        - method: setValue
+          parameters:
+            value: id qr code
+          returns:
+            - entity: redirection
+              attribute:
+                - redirectionid
+
+#      third:
+#        - method: setValue
+#          parameters:
+#            value: environnement
+#          returns:
+#            - entity: redirection
+#              attribute:
+#                - client
+#
+#        - method: setValue
+#          parameters:
+#            value: id qr code
+#          returns:
+#            - entity: redirection
+#              attribute:
+#                - redirectionid
+
+        - method: setValue
+          parameters:
+            value: entité interne
+          returns:
+            - entity: redirection
+              attribute:
+                - designation
+
+        - method: setValue
+          parameters:
+            value: url cible
+          returns:
+            - entity: redirection
+              attribute:
+                - redir_url
+
